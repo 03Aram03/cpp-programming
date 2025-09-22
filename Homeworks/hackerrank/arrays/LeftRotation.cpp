@@ -6,18 +6,23 @@ string ltrim(const string &);
 string rtrim(const string &);
 vector<string> split(const string &);
 
-/*
- * Complete the 'rotLeft' function below.
- *
- * The function is expected to return an INTEGER_ARRAY.
- * The function accepts following parameters:
- *  1. INTEGER_ARRAY a
- *  2. INTEGER d
- */
+
 
 vector<int> rotLeft(vector<int> a, int d) {
-
+    int n = a.size();
+    vector<int> result(n);
+    
+    for(int i = 0; i < n; i++) {
+        int newIndex = (i - d + n) % n;  // calculate new position
+        result[newIndex] = a[i];
+    }
+    
+    return result;
 }
+
+
+
+
 
 int main()
 {
