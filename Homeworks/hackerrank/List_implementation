@@ -1,0 +1,100 @@
+#include <iostream>
+#include <stdexcept>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+    Node(int val) : data(val), next(nullptr) {}
+};
+
+class MyLinkedList {
+private:
+    Node* head;
+    Node* tail;
+    int sz;
+
+public:
+    MyLinkedList() : head(nullptr), tail(nullptr), sz(0) {}
+
+    ~MyLinkedList() {
+        Node* current = head;
+        while (current) {
+            Node* temp = current;
+            current = current->next;
+            delete temp;
+        }
+    }
+
+    void push_back(int value) {
+        Node* newNode = new Node(value);
+        if (!head) {
+            head = tail = newNode;
+        } else {
+            tail->next = newNode;
+            tail = newNode;
+        }
+        sz++;
+    }
+
+    void pop_back() {
+        if (!head) return;
+        if (head == tail) {
+            delete head;
+            head = tail = nullptr;
+        } else {
+            Node* current = head;
+            while (current->next != tail)
+                current = current->next;
+            delete tail;
+            tail = current;
+            tail->next = nullptr;
+        }
+        sz--;
+    }
+
+    int size() const { return sz; }
+
+    int get(int index) const {
+        if (index < 0 || index >= sz)
+            throw out_of_range("Index out of range");
+        Node* current = head;
+        for (int i = 0; i < index; i++)
+            current = current->next;
+        return current->data;
+    }
+
+    void print() const {
+        Node* current = head;
+        while (current) {
+            cout << current->data << " ";
+            current = current->next;
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    MyLinkedList list;
+
+    list.push_back(10);
+    list.push_back(20);
+    list.push_back(30);
+
+    cout << "Size: " << list.size() << endl; // 3
+    cout << "Elements: ";
+    list.print(); // 10 20 30
+
+    cout << "Element at index 1: " << list.get(1) << endl; // 20
+
+    list.pop_back();
+    cout << "After pop_back, size: " << list.size() << endl; // 2
+    cout << "Elements: ";
+    list.print(); // 10 20
+
+    list.push_back(40);
+    cout << "After adding 40, Elements: ";
+    list.print(); // 10 20 40
+
+    return 0;
+}
