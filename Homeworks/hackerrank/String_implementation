@@ -1,0 +1,78 @@
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+class MyString {
+private:
+    char* str;  
+    int sz;      
+
+public:
+    MyString() {
+        sz = 0;
+        str = new char[1];
+        str[0] = '\0';
+    }
+
+    MyString(const char* s) {
+        sz = strlen(s);
+        str = new char[sz + 1];
+        strcpy(str, s);
+    }
+
+    MyString(const MyString& other) {
+        sz = other.sz;
+        str = new char[sz + 1];
+        strcpy(str, other.str);
+    }
+
+    ~MyString() {
+        delete[] str;
+    }
+
+    int length() const {
+        return sz;
+    }
+
+    void append(const MyString& other) {
+        char* newStr = new char[sz + other.sz + 1];
+        strcpy(newStr, str);
+        strcat(newStr, other.str);
+        delete[] str;
+        str = newStr;
+        sz += other.sz;
+    }
+
+    char& operator[](int index) {
+        if (index < 0 || index >= sz)
+            throw out_of_range("Index out of range");
+        return str[index];
+    }
+
+    void print() const {
+        cout << str << endl;
+    }
+};
+
+int main() {
+    MyString s1("Hello");
+    MyString s2(" World");
+
+    cout << "s1: ";
+    s1.print();
+
+    cout << "s2: ";
+    s2.print();
+
+    s1.append(s2);
+    cout << "After append, s1: ";
+    s1.print();
+
+    cout << "Length of s1: " << s1.length() << endl;
+
+    s1[0] = 'h';
+    cout << "After changing first character: ";
+    s1.print();
+
+    return 0;
+}
