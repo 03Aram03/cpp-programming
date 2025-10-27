@@ -32,7 +32,6 @@ public:
     }
 };
 
-// Usage in the same file
 int main() {
     MyVector v;
     v.push_back(10);
